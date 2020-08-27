@@ -14,7 +14,6 @@ class Sudoku:
                      ])
     solution = grid.copy()
 
-
     def setvalues(self, newgrid):
         self.grid = newgrid
 
