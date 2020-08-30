@@ -105,6 +105,10 @@ class Sudoku:
         self.__solvebacktracking(self.grid.copy())
         self.printsolution()
 
+    def solvesudokuintuitive(self):
+        self.__solveefficient(self.grid.copy())
+        self.printsolution()
+
     def printbase(self):
         self.printsudoku(self.grid)
 
@@ -128,6 +132,7 @@ def main():
     sdk.setvalues(test)
     sdk.printbase()
     sdk.solvesudoku()
+    sdk.solvesudokuintuitive()
 
 
 if __name__ == "__main__":
