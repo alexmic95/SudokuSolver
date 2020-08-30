@@ -1,5 +1,4 @@
 import numpy as np
-import time
 
 
 class Sudoku:
@@ -103,16 +102,7 @@ class Sudoku:
                     return
 
     def solvesudoku(self):
-        tic_normal = time.perf_counter()
         self.__solvebacktracking(self.grid.copy())
-        toc_normal = time.perf_counter()
-        print("Time taken by backtracking approach: " + str(toc_normal-tic_normal))
-
-        tic_efficient = time.perf_counter()
-        self.__solveefficient(self.grid.copy())
-        toc_efficient = time.perf_counter()
-        print("Time taken by efficient approach: " + str(toc_efficient-tic_efficient))
-
         self.printsolution()
 
     def printbase(self):
