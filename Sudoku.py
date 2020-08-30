@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 
 class Sudoku:
@@ -62,7 +63,31 @@ class Sudoku:
                     return False
         return True
 
-    def __solveg(self, g):
+    def __solveefficient(self, g):
+        run = True
+        while run:
+            run = False
+            for i in range(9):
+                for j in range(9):
+                    if g[i, j] == 0:
+                        poslist = []
+                        for x in range(1, 10):
+                            if self.__checkifpossible(g, i, j, x):
+                                poslist.append(x)
+                        if len(poslist) == 1:
+                            g[i, j] = poslist[0]
+                            run = True
+        zeroleft = False
+        for i in range(9):
+            for j in range(9):
+                if g[i, j] == 0:
+                    zeroleft = True
+        if zeroleft:
+            self.__solvebacktracking(g.copy())
+        else:
+            self.solution = g.copy()
+
+    def __solvebacktracking(self, g):
         for i in range(9):
             for j in range(9):
                 if g[i, j] == 0:
@@ -74,12 +99,21 @@ class Sudoku:
                                 self.solution = g.copy()
                                 # input("Enter für nächste Lösung")
                             else:
-                                self.__solveg(g.copy())
+                                self.__solvebacktracking(g.copy())
                     return
 
     def solvesudoku(self):
-        self.__solveg(self.grid)
-        self.printsudoku(self.solution)
+        tic_normal = time.perf_counter()
+        self.__solvebacktracking(self.grid.copy())
+        toc_normal = time.perf_counter()
+        print("Time taken by backtracking approach: " + str(toc_normal-tic_normal))
+
+        tic_efficient = time.perf_counter()
+        self.__solveefficient(self.grid.copy())
+        toc_efficient = time.perf_counter()
+        print("Time taken by efficient approach: " + str(toc_efficient-tic_efficient))
+
+        self.printsolution()
 
     def printbase(self):
         self.printsudoku(self.grid)
@@ -89,19 +123,20 @@ class Sudoku:
 
 
 def main():
-    test = np.array([[1, 0, 0, 0, 0, 3, 0, 0, 2],
-                     [0, 3, 0, 8, 0, 0, 6, 0, 0],
-                     [4, 9, 0, 0, 6, 0, 0, 3, 1],
-                     [0, 2, 0, 0, 0, 6, 4, 0, 0],
-                     [0, 8, 3, 5, 0, 7, 0, 0, 0],
-                     [6, 5, 0, 0, 0, 0, 8, 0, 3],
-                     [0, 0, 0, 1, 2, 0, 5, 0, 0],
-                     [0, 7, 0, 0, 0, 0, 0, 1, 0],
-                     [8, 0, 2, 7, 5, 9, 0, 0, 0]
+    test = np.array([[0, 0, 0, 0, 0, 0, 4, 0, 0],
+                     [7, 0, 0, 2, 0, 3, 0, 0, 0],
+                     [0, 0, 0, 0, 9, 1, 6, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 7, 0, 0],
+                     [0, 1, 6, 4, 3, 0, 0, 0, 0],
+                     [9, 0, 0, 5, 0, 0, 0, 0, 2],
+                     [5, 0, 0, 0, 0, 0, 0, 0, 1],
+                     [0, 7, 0, 0, 5, 0, 3, 0, 9],
+                     [0, 0, 9, 0, 7, 0, 0, 0, 0]
                      ])
+
     sdk = Sudoku()
     sdk.setvalues(test)
-    sdk.printsudoku(sdk.grid)
+    sdk.printbase()
     sdk.solvesudoku()
 
 
