@@ -62,30 +62,6 @@ class Sudoku:
                     return False
         return True
 
-    def __solveefficient(self, g):
-        run = True
-        while run:
-            run = False
-            for i in range(9):
-                for j in range(9):
-                    if g[i, j] == 0:
-                        poslist = []
-                        for x in range(1, 10):
-                            if self.__checkifpossible(g, i, j, x):
-                                poslist.append(x)
-                        if len(poslist) == 1:
-                            g[i, j] = poslist[0]
-                            run = True
-        zeroleft = False
-        for i in range(9):
-            for j in range(9):
-                if g[i, j] == 0:
-                    zeroleft = True
-        if zeroleft:
-            self.__solvebacktracking(g.copy())
-        else:
-            self.solution = g.copy()
-
     def __solvebacktracking(self, g):
         for i in range(9):
             for j in range(9):
@@ -94,9 +70,7 @@ class Sudoku:
                         if self.__checkifpossible(g, i, j, x):
                             g[i, j] = x
                             if (i == 8) & (j == 8):
-                                # self.printsudoku(g)
                                 self.solution = g.copy()
-                                # input("Enter für nächste Lösung")
                             else:
                                 self.__solvebacktracking(g.copy())
                     return
@@ -105,10 +79,6 @@ class Sudoku:
 
     def solvesudoku(self):
         self.__solvebacktracking(self.grid.copy())
-        self.printsolution()
-
-    def solvesudokuintuitive(self):
-        self.__solveefficient(self.grid.copy())
         self.printsolution()
 
     def printbase(self):
@@ -134,7 +104,6 @@ def main():
     sdk.setvalues(test)
     sdk.printbase()
     sdk.solvesudoku()
-    sdk.solvesudokuintuitive()
 
 
 if __name__ == "__main__":
